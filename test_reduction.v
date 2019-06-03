@@ -18,10 +18,12 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
+`timescale 1ns / 1ps
+
 module test_reduction();
 
-	parameter N=12;
-	parameter M=6;
+	parameter N=8;
+	parameter M=8;
 	parameter OUT=(N/M)*(M/2+1);
 
 	reg [N-1:0] in;
@@ -30,8 +32,9 @@ module test_reduction();
 	reduction #(.N(N),.M(M)) uut(.in(in),.out(out));
 	
 	initial begin
-		in=12'b100100100100;
-		$monitor("%d",out);
+	  in=8'b01010000;
+      $monitor("%b",out);
+      //$monitor("%d",OUT);
 	end
 
 endmodule
