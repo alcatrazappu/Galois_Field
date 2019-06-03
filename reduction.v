@@ -18,6 +18,8 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
+`timescale 1ns/1ps
+
 module reduction(in,out);
 	
 	function integer clog2;
@@ -38,14 +40,17 @@ module reduction(in,out);
 	output [OUT-1:0] out;
 	
 	//wire [OUT-1:0] temp;
+  
+    initial begin
+      $monitor("%d",OUT);
+    end
 	
 	genvar i;
 	generate
 		for(i=0;i<N;i=i+M) begin: reduction
-			asm #(.SIZE(M)) assembler(.in(in[i+:M]),.out(out[(i-i/M)+:(M/2)+1]));
+          asm #(.SIZE(M)) assembler(.in(in[i+:M]),.out(out[(i*(M/2+1)/M)+:(M/2)+1]));
 		end
 	endgenerate
 	
 	//assign out=temp;
-
 endmodule
