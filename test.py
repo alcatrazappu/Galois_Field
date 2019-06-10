@@ -2,7 +2,7 @@ import fileinput
 import os
 from io import StringIO
 import sys
-import softposit as sp
+#import softposit as sp
 
 def tcl_maker(tcl_template,tcl_out,Project_Name,Top_Module,Top_File,Run_Time="100ms"):
     f=open(tcl_template,'r')
@@ -72,8 +72,8 @@ def compare(hp,sp,INA_L,INA_H,INB_L,INB_H):
     flag=0
     for i in range(INA_L,INA_H):
         for j in range(INB_L,INB_H):
-            data_x=x.readlines()
-            data_y=y.readlines()
+            data_x=x.readline()
+            data_y=y.readline()
             if(data_x!=data_y):
                 flag=1
                 print("Error: ",i,j)
@@ -90,12 +90,34 @@ if __name__=='__main__':
     INB_L=0
     INB_H=16
     
-    batch_maker("C:/Users/UUA4KOR/Documents/Test_Posit_Add/batch_template.bat","C:/Users/UUA4KOR/Documents/Test_Posit_Add/test.bat","C:/Xilinx/Vivado/2018.3/bin/vivado.bat","C:/Users/UUA4KOR/Documents/Test_Posit_Add/test.tcl")
-    tb_maker("C:/Users/UUA4KOR/Documents/Test_Posit_Add/posit_add_tb_template.v","C:/Users/UUA4KOR/Documents/Test_Posit_Add/tb.v","C:/Users/UUA4KOR/Documents/Test_Posit_Add/output.txt",N,ES,INA_L,INA_H,INB_L,INB_H)
-    tcl_maker("C:/Users/UUA4KOR/Documents/Test_posit_Add/tcl_template.tcl","C:/Users/UUA4KOR/Documents/Test_Posit_Add/test.tcl","C:/Users/UUA4KOR/Documents/Posit_Adder/Posit_Adder/Posit_Adder.xpr","Posit_Addition_Test_benchh","C:/Users/UUA4KOR/Documents/Test_Posit_Add/tb.v")
+    batch_template="C:/Users/UUA4KOR/Documents/Test_Posit_Add/batch_template.bat"
+    batch_out="C:/Users/UUA4KOR/Documents/Test_Posit_Add/test.bat"
+    vivado="C:/Xilinx/Vivado/2018.3/bin/vivado.bat"
+    tcl="C:/Users/UUA4KOR/Documents/Test_Posit_Add/test.tcl"
+    
+    tb_template="C:/Users/UUA4KOR/Documents/Test_Posit_Add/posit_add_tb_template.v"
+    tb="C:/Users/UUA4KOR/Documents/Test_Posit_Add/tb.v"
+    hp_out="C:/Users/UUA4KOR/Documents/Test_Posit_Add/output.txt"
+    
+    tcl_template="C:/Users/UUA4KOR/Documents/Test_posit_Add/tcl_template.tcl"
+    project="C:/Users/UUA4KOR/Documents/Posit_Adder/Posit_Adder/Posit_Adder.xpr"
+    test_bench_module="Posit_Addition_Test_benchh"
+    tb="C:/Users/UUA4KOR/Documents/Test_Posit_Add/tb.v"
+    
+    bat_loc="C:/Users/UUA4KOR/Documents/Test_Posit_Add/test.bat"
+    
+    #batch_maker("C:/Users/UUA4KOR/Documents/Test_Posit_Add/batch_template.bat","C:/Users/UUA4KOR/Documents/Test_Posit_Add/test.bat","C:/Xilinx/Vivado/2018.3/bin/vivado.bat","C:/Users/UUA4KOR/Documents/Test_Posit_Add/test.tcl")
+    #tb_maker("C:/Users/UUA4KOR/Documents/Test_Posit_Add/posit_add_tb_template.v","C:/Users/UUA4KOR/Documents/Test_Posit_Add/tb.v","C:/Users/UUA4KOR/Documents/Test_Posit_Add/output.txt",N,ES,INA_L,INA_H,INB_L,INB_H)
+    #tcl_maker("C:/Users/UUA4KOR/Documents/Test_posit_Add/tcl_template.tcl","C:/Users/UUA4KOR/Documents/Test_Posit_Add/test.tcl","C:/Users/UUA4KOR/Documents/Posit_Adder/Posit_Adder/Posit_Adder.xpr","Posit_Addition_Test_benchh","C:/Users/UUA4KOR/Documents/Test_Posit_Add/tb.v")
     #os.system("call C:/Users/UUA4KOR/Documents/Test_Posit_Add/test.bat")
     
-    f=open("C:/Users/UUA4KOR/Documents/Test_Posit_Add/SP_result.txt","w")
+    batch_maker(batch_template,batch_out,vivado,tcl)
+    tb_maker(tb_template,tb,hp_out,N,ES,INA_L,INA_H,INB_L,INB_H)
+    tcl_maker(tcl_template,tcl,project,test_bench_module,tb)
+    os.system("call "+bat_loc)
+    
+    
+    '''f=open("C:/Users/UUA4KOR/Documents/Test_Posit_Add/SP_result.txt","w")
     A=sp.posit16()
     B=sp.posit16()
     for i in range(INA_L,INA_H):
@@ -107,7 +129,6 @@ if __name__=='__main__':
             C=A+B
             out=std_extract(C)+'\n'
             f.writelines(out)
-    f.close()
-    compare("C:/Users/UUA4KOR/Documents/Test_Posit_Add/output.txt","C:/Users/UUA4KOR/Documents/Test_Posit_Add/SP_result.txt",2,256,2,256)
-    
+    f.close()'''
+    compare("C:/Users/OJT1KOR/Documents/Test_Posit_Add/output.txt","C:/Users/OJT1KOR/Documents/Test_Posit_Add/SP_result.txt",INA_L,INA_H,INB_L,INB_H)
     
